@@ -1,11 +1,18 @@
 import express, {Express, Request, Response} from "express"
 const app: Express = express()
-
-const port: number = 3000
-
-app.get("/articles", (req: Request,res: Response)=>{
+import dotenv from "dotenv"
+dotenv.config()
+const port: number | string = process.env.PORT || 3000
+import * as database from "./config/database"
+import Article from "./models/article.model"
+database.connect()
+//Rest API
+app.get("/articles", async (req: Request,res: Response)=>{
+  const articles = await Article.find({
+    deleted: false
+  })
   res.json({
-    article: []
+    article: articles
   })
 } )
 
