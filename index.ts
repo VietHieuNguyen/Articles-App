@@ -1,21 +1,37 @@
-import express, {Express, Request, Response} from "express"
+import express, { Express, Request, Response } from "express"
 const app: Express = express()
 import dotenv from "dotenv"
-dotenv.config()
-const port: number | string = process.env.PORT || 3000
 import * as database from "./config/database"
 import Article from "./models/article.model"
-database.connect()
-//Rest API
-app.get("/articles", async (req: Request,res: Response)=>{
-  const articles = await Article.find({
-    deleted: false
-  })
-  res.json({
-    article: articles
-  })
-} )
+import { Query } from "mongoose"
+import { ApolloServer } from "@apollo/server"
+import cors from "cors"
+import { expressMiddleware } from '@as-integrations/express5';
+import { typeDefs } from "./typeDefs"
+import { resolvers } from "./resolvers"
+const startServer = async () => {
+  dotenv.config()
 
-app.listen(port, ()=>{
-  console.log(`App listening on port ${port}`)
-})
+  const port: number | string = process.env.PORT || 3000
+
+  database.connect()
+
+
+  
+  const apolloServer = new ApolloServer({
+    typeDefs,
+    resolvers,
+    
+  });
+  await apolloServer.start();
+  app.use(
+    "/graphql",
+    cors(),             // Bật CORS
+    express.json(),     // Bắt buộc phải có để Express đọc được body JSON từ GraphQL
+    expressMiddleware(apolloServer)
+  );
+  app.listen(port, () => {
+    console.log(`App listening on port ${port}`)
+  })
+}
+startServer();
