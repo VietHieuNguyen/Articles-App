@@ -21,5 +21,6 @@ export  const typeDefs = `#graphql
   type Mutation{  #thêm sửa xóa
     createArticle(article: ArticleInput): Article
     deleteArticle(id: ID): String
+    updateArticle(id: ID, article: ArticleInput): Article
   }
 `;
