@@ -29,6 +29,16 @@ export const resolvers = {
 
         return records;
         
+      },
+      deleteArticle: async (_:any, args: any)=>{
+        const {id} = args;
+        await Article.updateOne({
+          _id: id,
+        },{
+          deleted: true,
+          deletedAt: Date.now()
+        })
+        return "Thành công"
       }
     }
   }
