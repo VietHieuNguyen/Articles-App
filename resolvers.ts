@@ -10,6 +10,14 @@ export const resolvers = {
           deleted: false
         })
         return articles
+      },
+      getArticle : async(_: any, args:any)=>{
+          const {id} = args;
+          const articles = await Article.findOne({
+            _id: id,
+          deleted: false
+        })
+        return articles
       }
     }
   }

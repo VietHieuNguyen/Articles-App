@@ -11,5 +11,7 @@ export  const typeDefs = `#graphql
   type Query {
     hello: String
     getListArticle: [Article]
+    getArticle(id: ID): Article
   }
+  
 `;
