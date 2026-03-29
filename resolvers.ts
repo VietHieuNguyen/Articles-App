@@ -35,6 +35,15 @@ export const resolvers = {
         return category
       },
     },
+    Article:{
+      category:async (article:any)=>{
+        const id = article.categoryId;
+        const category = await Category.findOne({
+          _id: id
+        })
+        return category
+      }
+    },
     Mutation:{
       createArticle: async (_:any, args: any)=>{
         const {article} = args;
