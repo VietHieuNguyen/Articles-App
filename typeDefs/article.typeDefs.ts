@@ -18,7 +18,8 @@ export  const typeDefsArticle = `#graphql
       currentPage: Int = 1,
       limitItem: Int = 2,
       filterKey: String,
-      filterValue: String): [Article]
+      filterValue: String,
+      keyword: String): [Article]
     getArticle(id: ID): Article
 
    

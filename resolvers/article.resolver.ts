@@ -6,7 +6,7 @@ export const resolversArticle = {
     Query: {
       
       getListArticle: async (_:any, args: any)=>{
-        const {sortKey, sortValue, currentPage, limitItem,filterKey, filterValue} = args;
+        const {sortKey, sortValue, currentPage, limitItem,filterKey, filterValue, keyword} = args;
         const find:{[key: string]: boolean|any} ={
           deleted: false
         }
@@ -20,6 +20,14 @@ export const resolversArticle = {
         //Pagination
         const skip = (currentPage - 1)* limitItem;
         //End Pagination
+        
+
+        //Search
+        if(keyword){
+          const keywordRegex = new RegExp(keyword, "i");
+          find["title"] = keywordRegex;
+        }
+        //end search
 
         if(filterKey && filterValue){
           find[filterKey] = filterValue;
