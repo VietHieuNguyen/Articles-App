@@ -1,14 +1,13 @@
-import express, { Express, Request, Response } from "express"
+import express, { Express } from "express"
 const app: Express = express()
 import dotenv from "dotenv"
 import * as database from "./config/database"
-import Article from "./models/article.model"
-import { Query } from "mongoose"
+
 import { ApolloServer } from "@apollo/server"
 import cors from "cors"
 import { expressMiddleware } from '@as-integrations/express5';
 import { typeDefs } from "./typeDefs/index.typeDefs"
-import { resolvers } from "./resolvers"
+import { resolvers } from "./resolvers/index.resolver"
 
 
 const startServer = async () => {
@@ -22,7 +21,7 @@ const startServer = async () => {
   
   const apolloServer = new ApolloServer({
     typeDefs: typeDefs,
-    resolvers,
+    resolvers: resolvers,
     
   });
   await apolloServer.start();
