@@ -6,7 +6,7 @@ export const resolversArticle = {
     Query: {
       
       getListArticle: async (_:any, args: any)=>{
-        const {sortKey, sortValue} = args;
+        const {sortKey, sortValue, currentPage, limitItem} = args;
         //Sort
         // console.log(args)
         const sort: {[key: string]: any} ={}
@@ -14,9 +14,12 @@ export const resolversArticle = {
           sort[sortKey] = sortValue;
         }
         //end
+        //Pagination
+        const skip = (currentPage - 1)* limitItem;
+        //End Pagination
         const articles = await Article.find({
           deleted: false
-        }).sort(sort)
+        }).sort(sort).limit(limitItem).skip(skip)
         return articles
       },
       getArticle : async(_: any, args:any)=>{
