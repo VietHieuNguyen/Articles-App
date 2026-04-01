@@ -10,11 +10,11 @@ export const resolversUser = {
   Mutation: {
     registerUser: async (_: any, args: any) => {
       const { user } = args;
-      
+
       const existEmail = await User.findOne({
         email: user.email
       })
-      
+
       if (existEmail) {
         return ({
           code: 400,
@@ -34,6 +34,36 @@ export const resolversUser = {
           id: data.id,
           fullName: data.fullName,
           token: data.token
+        }
+      }
+    },
+    loginUser: async (_: any, args: any) => {
+      const { user } = args;
+      const infoUser = await User.findOne({
+        email: user.email,
+        deleted: false
+      });
+      
+      if (infoUser) {
+        const isMatch = await bcrypt.compare(user.password,infoUser.password!);
+        if (isMatch) {
+          return {
+            code: 200,
+            "message": "Đăng nhập thành công",
+            id: infoUser.id,
+            fullName: infoUser.fullName,
+            token: infoUser.token
+          }
+        }else{
+          return {
+            code: 400,
+            message: "Sai mật khẩu"
+          }
+        }
+      } else {
+        return {
+          code: 400,
+          "message": "Đăng nhập thất bại"
         }
       }
     }
