@@ -8,6 +8,7 @@ import cors from "cors"
 import { expressMiddleware } from '@as-integrations/express5';
 import { typeDefs } from "./typeDefs/index.typeDefs"
 import { resolvers } from "./resolvers/index.resolver"
+import { requireAuth } from "./middlewares/auth.middeware"
 
 
 const startServer = async () => {
@@ -27,9 +28,16 @@ const startServer = async () => {
   await apolloServer.start();
   app.use(
     "/graphql",
+    requireAuth,
     cors(),             // Bật CORS
     express.json(),     // Bắt buộc phải có để Express đọc được body JSON từ GraphQL
-    expressMiddleware(apolloServer)
+    expressMiddleware(apolloServer,{
+      context: async({req})=>{
+        return {
+          user: (req as any).user
+        }
+      }
+    })
   );
   app.listen(port, () => {
     console.log(`App listening on port ${port}`)

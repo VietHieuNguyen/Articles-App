@@ -6,7 +6,35 @@ import crypto from "crypto"
 const level = 10
 
 export const resolversUser = {
+  Query:{
+    getUser: async(_:any, args: any, context: any)=>{
+      // const {id} = args
+      if(!context["user"].token){
+        return {
+          code: 400,
+          message:"Lỗi"
+        }
+      }
+      const infoUser = await User.findOne({
+        token: context["user"].token,
+        deleted: false
+      });
+      // console.log(infoUser)
+      if(infoUser){
+        return{
+          code: 200,
+          id: infoUser.id,
+          fullName: infoUser.fullName,
+          token: infoUser.token
+        }
+      }
 
+      return {
+        code: 400,
+        message: "Thất bại"
+      }
+    }
+  },
   Mutation: {
     registerUser: async (_: any, args: any) => {
       const { user } = args;
@@ -30,7 +58,7 @@ export const resolversUser = {
         console.log(user)
         return {
           code: 200,
-          "message": "Đăng kí thành công",
+          message: "Đăng kí thành công",
           id: data.id,
           fullName: data.fullName,
           token: data.token

@@ -20,6 +20,9 @@ export  const typeDefsUser = `#graphql
     email: String,
     password: String
   }
+  type Query{
+    getUser: User
+  }
   type Mutation{  #thêm sửa xóa
     registerUser(user: RegisterUserInput) : User
     loginUser(user: LoginUserInput): User
