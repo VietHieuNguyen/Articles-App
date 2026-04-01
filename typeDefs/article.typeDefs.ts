@@ -12,7 +12,7 @@ export  const typeDefsArticle = `#graphql
   
   type Query {
     hello: String
-    getListArticle: [Article]
+    getListArticle(sortKey: String, sortValue: String): [Article]
     getArticle(id: ID): Article
 
    
