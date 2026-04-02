@@ -9,6 +9,7 @@ import { expressMiddleware } from '@as-integrations/express5';
 import { typeDefs } from "./typeDefs/index.typeDefs"
 import { resolvers } from "./resolvers/index.resolver"
 import { requireAuth } from "./middlewares/auth.middeware"
+import { ApolloServerPluginLandingPageLocalDefault } from "@apollo/server/plugin/landingPage/default"
 
 
 const startServer = async () => {
@@ -23,6 +24,10 @@ const startServer = async () => {
   const apolloServer = new ApolloServer({
     typeDefs: typeDefs,
     resolvers: resolvers,
+    // Thêm dòng này để bật Sandbox ngay cả khi ở production
+  plugins: [
+    ApolloServerPluginLandingPageLocalDefault({ embed: true })
+  ],
     introspection: true
   });
   await apolloServer.start();
